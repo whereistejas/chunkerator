@@ -1,3 +1,4 @@
+## Chunkerator.
 A simple trait to convert an iterator into something that returns chunks.
 
 ```rust
@@ -9,7 +10,7 @@ fn main() {
 
     for (i, chunk) in collection.into_iter().chunks(2).enumerate() {
         println!("i: {i}, chunk: {chunk:?}");
-        assert_eq!(chunk.items, expected[i])
+        assert_eq!(chunk.items(), &expected[i]);
     }
 }
 ```
