@@ -11,6 +11,7 @@ impl<I: Iterator> Chunkerator for I {
     }
 }
 
+#[derive(Debug)]
 pub struct Chunks<I: Iterator> {
     inner: I,
     n: usize,
@@ -22,8 +23,16 @@ pub struct Chunk<T> {
 }
 
 impl<T> Chunk<T> {
-    fn new() -> Self {
-        Self { items: Vec::new() }
+    pub fn items(&self) -> &[T] {
+        &self.items
+    }
+}
+
+impl<T> Default for Chunk<T> {
+    fn default() -> Self {
+        Self {
+            items: Vec::default(),
+        }
     }
 }
 
@@ -33,7 +42,7 @@ impl<I: Iterator> Iterator for Chunks<I> {
     fn next(&mut self) -> Option<Self::Item> {
         let Self { inner, n } = self;
 
-        let mut chunk = Chunk::new();
+        let mut chunk = Chunk::default();
 
         let mut count = *n;
         loop {
@@ -62,7 +71,7 @@ mod tests {
 
         for (i, chunk) in collection.into_iter().chunks(2).enumerate() {
             println!("i: {i}, chunk: {chunk:?}");
-            assert_eq!(chunk.items, expected[i])
+            assert_eq!(chunk.items(), &expected[i]);
         }
     }
 
@@ -73,7 +82,7 @@ mod tests {
 
         for (i, chunk) in collection.into_iter().chunks(4).enumerate() {
             println!("i: {i}, chunk: {chunk:?}");
-            assert_eq!(chunk.items, expected[i])
+            assert_eq!(chunk.items(), &expected[i]);
         }
     }
 }
