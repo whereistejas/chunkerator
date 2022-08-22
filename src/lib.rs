@@ -17,20 +17,17 @@ pub struct Chunks<I: Iterator> {
 }
 
 #[derive(Debug)]
-pub struct Chunk<T: Clone> {
+pub struct Chunk<T> {
     items: Vec<T>,
 }
 
-impl<T: Clone> Chunk<T> {
+impl<T> Chunk<T> {
     fn new() -> Self {
         Self { items: Vec::new() }
     }
 }
 
-impl<I: Iterator> Iterator for Chunks<I>
-where
-    I::Item: Clone,
-{
+impl<I: Iterator> Iterator for Chunks<I> {
     type Item = Chunk<I::Item>;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -64,6 +61,17 @@ mod tests {
         let expected = vec![vec![1, 1], vec![2, 2], vec![3, 3], vec![4, 4], vec![5]];
 
         for (i, chunk) in collection.into_iter().chunks(2).enumerate() {
+            println!("i: {i}, chunk: {chunk:?}");
+            assert_eq!(chunk.items, expected[i])
+        }
+    }
+
+    #[test]
+    fn chunks_of_four() {
+        let collection = vec![1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3];
+        let expected = vec![vec![1, 1, 1, 1], vec![2, 2, 2, 2], vec![3, 3, 3]];
+
+        for (i, chunk) in collection.into_iter().chunks(4).enumerate() {
             println!("i: {i}, chunk: {chunk:?}");
             assert_eq!(chunk.items, expected[i])
         }
