@@ -1,4 +1,4 @@
-trait Chunkerator: Iterator + Sized {
+pub trait Chunkerator: Iterator + Sized {
     fn chunks(self, size: usize) -> Chunks<Self>;
 }
 
@@ -11,18 +11,18 @@ impl<I: Iterator> Chunkerator for I {
     }
 }
 
-struct Chunks<I: Iterator> {
+pub struct Chunks<I: Iterator> {
     inner: I,
     n: usize,
 }
 
 #[derive(Debug)]
-struct Chunk<T: Clone> {
+pub struct Chunk<T: Clone> {
     items: Vec<T>,
 }
 
 impl<T: Clone> Chunk<T> {
-    pub fn new() -> Self {
+    fn new() -> Self {
         Self { items: Vec::new() }
     }
 }
